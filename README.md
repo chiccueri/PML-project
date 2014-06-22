@@ -1,4 +1,5 @@
-PML-project
+Practical Machine Learning - project
 ===========
 
-Human Activity Recognition
+To evaluate the HTML file please download the repo (see the <download> button on the right) and open the compiled HTML
+document named "PML-project.html".
