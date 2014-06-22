@@ -1,7 +1,7 @@
 Human Activity Recognition
 ========================================================
 
-```{r cache=TRUE}
+```{r}
 library(ggplot2)
 library(lattice)
 library(caret)
@@ -21,7 +21,7 @@ data2 <- data[,which(NAsum==0)]
 nsv <- nearZeroVar(data2, saveMetrics=TRUE)
 data3 <- data2[,which(nsv$nzv==FALSE)]
 # discard unuseful predictors
-uPredict <- grep("timestamp|X|user_name|new_window",names(data3)) #?
+uPredict <- grep("timestamp|X|user_name|new_window",names(data3))
 data5 <- data3[,-uPredict]
 
 ptm <- proc.time()
@@ -31,22 +31,13 @@ inTrain <- createDataPartition(y = data5$classe, p=0.25,list=FALSE)
 training <- data5[inTrain,]
 testing <- data5[-inTrain,]
 testing2<-testing[sample(nrow(testing),size=dim(training)[1]*2/6),]
-testing201<-testing[sample(nrow(testing),size=20),]
-testing202<-testing[sample(nrow(testing),size=20),]
-testing203<-testing[sample(nrow(testing),size=20),]
+
 # model
 modelFit <- train(classe ~., data=training, trControl= trainControl(method = "cv", number = 4), method="rf", prox=TRUE)
 modelFit
 confusionMatrix(testing2$classe, predict(modelFit,testing2))
 # time taken
 proc.time() - ptm
-# prediction
-confusionMatrix(testing201$classe, predict(modelFit,testing201))
-predict(modelFit,newdata=testing201)
-confusionMatrix(testing202$classe, predict(modelFit,testing202))
-predict(modelFit,newdata=testing202)
-confusionMatrix(testing203$classe, predict(modelFit,testing203))
-predict(modelFit,newdata=testing203)
 ```
 
 ```{r}
@@ -56,60 +47,6 @@ dataTestC <- dataTest[,colnames(dataTest) %in% colnames(data5)]
 # prediction
 predictions2 <- predict(modelFit,newdata=dataTestC)
 predictions2
-predictions2[11]
 ```
 
-```{r eval:FALSE}
-modelFit2 <- train(training$classe~., method="rf", preProcess="pca", data=training)
-# prediction
-predictions <- predict(modelFit2,newdata=testing)
-predictions
-```
-
-```{r eval:FALSE}
-#options(scipen = 1)
-naCol<-vector()
-for (i in 1:length(data)){
-  n<-sum(is.na(data[,i]))
-  r<-n/length(data[,i])
-  if(r>0.5){
-    naCol<-append(naCol,i)
-  }
-}
-data2<-data[,-naCol]
-```
-
-```{r eval:FALSE}
-# discard NAs
-NAs <- apply(data,2,function(x) {sum(is.na(x))}) 
-validData <- data[,which(NAs == 0)]
-# make training set
-trainIndex <- createDataPartition(y = validData$classe, p=0.2,list=FALSE) # 3927 rows
-trainData <- validData[trainIndex,]
-# discards unuseful predictors
-removeIndex <- grep("timestamp|X|user_name|new_window",names(trainData))
-trainData <- trainData[,-removeIndex]
-# make model
-modFit <- train(trainData$classe ~.,data = trainData,method="rpart")
-modFit
-```
-
-```{r eval:FALSE}
-# discard uncorrelated predictors
-inClasse <- which(names(data4)=="classe")
-M <- abs(cor(data4[,-inClasse]))
-diag(M) <- 0
-corPred <- which(M>0.8, arr.ind=TRUE)
-inCorPred <- unique(corPred[,1])
-data5 <- data4[,c(inClasse,inCorPred)]
-```
-
-```{r}
-M<-abs(cor(mtcars))
-diag(M)<-0
-#M08<-which(M>0.8, arr.ind=TRUE)
-M
-cbind(M[,1],M[,9])
-
-```
 
