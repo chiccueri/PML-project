@@ -8,14 +8,14 @@ More information is available from the website here: http://groupware.les.inf.pu
 
 Our goal is to predict the manner in which they did the exercise, this is the "classe" variable in the training set (pml-training.csv), even using any of the other variables to predict with. The prediction model predicted 20 different test cases (pml-testing.csv).
 
-Given the high dimension of the raw data set (a data frame with 19622 observations on 160 variables) and the capacity/velocity of the laptop I did the work with, I had to build a training data set as shorter as possible keeping the model accuracy as higher as I could.
+Given the high dimension of the raw data set (a data frame with 19622 observations on 160 variables) and the capacity/velocity of the laptop I did the work with, I had to build a training data set as shorter as possible keeping the model accuracy as higher as I could.  
 
-This was my steps I followed:
-1. ***cleaned the data set***: I reduced the predictors to 53 after discarded missing values, variables with no significant variance and some variables clearly unuseful to build the model.
-2. ***build my training and testing data sets***: I build a training data set with 4907 rows (25% of the original) and a testing data set of 1/3.
-3. ***fitted the model***: to build the model I used Random forest algorithm, setting the resampling method to 4 cross-validation.
-4. ***tested the model***: with confusionMatrix() I calculated a cross-tabulation of observed and predicted classes with associated statistics. That resulted in a fairly low out of sample error with an accuracy of 0.987.
-5. ***predicted results***: I applied the model to the 20 test cases available in the test data file.
+This is how I proceeded:  
+1. ***cleaned the data set***: I reduced the predictors to 53 after discarded missing values, variables with no significant variance and some variables clearly unuseful to build the model.  
+2. ***built my training and testing data sets***: I build a training data set with 4907 rows (25% of the original) and a testing data set of 1/3.  
+3. ***fitted the model***: to build the model I used Random forest algorithm, setting the resampling method to 4 cross-validation.  
+4. ***tested the model***: with confusionMatrix() I calculated a cross-tabulation of observed and predicted classes with associated statistics. That resulted in a fairly low out of sample error as the accuracy is over 0.95.  
+5. ***predicted results***: I applied the model to the 20 test cases available in the test data file.  
 
 
 ### Algorithm
@@ -82,14 +82,14 @@ modelFit
 ## No pre-processing
 ## Resampling: Cross-Validated (4 fold) 
 ## 
-## Summary of sample sizes: 3680, 3681, 3679, 3681 
+## Summary of sample sizes: 3680, 3681, 3681, 3679 
 ## 
 ## Resampling results across tuning parameters:
 ## 
 ##   mtry  Accuracy  Kappa  Accuracy SD  Kappa SD
-##   2     1         1      0.003        0.004   
-##   30    1         1      0.002        0.003   
-##   50    1         1      0.001        0.002   
+##   2     1         1      0.007        0.009   
+##   30    1         1      0.004        0.005   
+##   50    1         1      0.004        0.005   
 ## 
 ## Accuracy was used to select the optimal model using  the largest value.
 ## The final value used for the model was mtry = 27.
@@ -104,33 +104,33 @@ confusionMatrix(testing2$classe, predict(modelFit, testing2))
 ## 
 ##           Reference
 ## Prediction   A   B   C   D   E
-##          A 476   0   0   0   0
-##          B   2 330   1   0   0
-##          C   0   3 283   0   0
-##          D   0   0   6 266   0
-##          E   0   0   0   0 268
+##          A 461   0   0   0   0
+##          B   3 315   2   0   1
+##          C   0   4 260   0   0
+##          D   0   0   2 288   0
+##          E   0   1   0   0 298
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.993         
-##                  95% CI : (0.987, 0.996)
-##     No Information Rate : 0.292         
+##                Accuracy : 0.992         
+##                  95% CI : (0.986, 0.996)
+##     No Information Rate : 0.284         
 ##     P-Value [Acc > NIR] : <2e-16        
 ##                                         
-##                   Kappa : 0.991         
+##                   Kappa : 0.99          
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.996    0.991    0.976    1.000    1.000
-## Specificity             1.000    0.998    0.998    0.996    1.000
-## Pos Pred Value          1.000    0.991    0.990    0.978    1.000
-## Neg Pred Value          0.998    0.998    0.995    1.000    1.000
-## Prevalence              0.292    0.204    0.177    0.163    0.164
-## Detection Rate          0.291    0.202    0.173    0.163    0.164
-## Detection Prevalence    0.291    0.204    0.175    0.166    0.164
-## Balanced Accuracy       0.998    0.994    0.987    0.998    1.000
+## Sensitivity             0.994    0.984    0.985    1.000    0.997
+## Specificity             1.000    0.995    0.997    0.999    0.999
+## Pos Pred Value          1.000    0.981    0.985    0.993    0.997
+## Neg Pred Value          0.997    0.996    0.997    1.000    0.999
+## Prevalence              0.284    0.196    0.161    0.176    0.183
+## Detection Rate          0.282    0.193    0.159    0.176    0.182
+## Detection Prevalence    0.282    0.196    0.161    0.177    0.183
+## Balanced Accuracy       0.997    0.990    0.991    0.999    0.998
 ```
 
 ```r
@@ -140,7 +140,7 @@ proc.time() - ptm
 
 ```
 ##    user  system elapsed 
-##  610.56    5.75  620.52
+##  606.16    5.29  621.82
 ```
 
 
